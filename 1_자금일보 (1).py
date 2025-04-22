@@ -11,18 +11,17 @@ import openpyxl
 # 페이지 설정
 st.set_page_config(page_title="자금일보", layout="wide")
 
+DEFAULT_FILE_PATH = "data/ACOT_CashFlow_TEST_classified_완료.xlsm"
+
 # 파일 업로드 (사이드바)
 uploaded_file = st.sidebar.file_uploader("엑셀 파일을 업로드하세요", type=['xlsx', 'xlsm', 'xls'], accept_multiple_files=False)
 
-if uploaded_file is not None:
+if uploaded_file is None:
+    st.info("기본 샘플 데이터를 사용 중입니다.")
+    unploaded_file = DEFAULT_FILE_PATH
+    
     # Daily 시트 로드
     df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
-    st.success("업로드된 파일을 사용하고 있습니다.")
-else:
-    # GitHub에 함께 올려둔 파일 (상대경로로 접근)
-    df_daily = pd.read_excel("ACOT_CashFlow_TEST_classified_완료.xlsm", sheet_name="Daily")
-    st.info("기본 엑셀파일을 자동으로 불러왔습니다.")
-    
     df_daily['지출일'] = pd.to_datetime(df_daily['지출일'])
     
     # 탭 생성
