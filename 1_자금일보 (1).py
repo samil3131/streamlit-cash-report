@@ -41,8 +41,8 @@ st.success(f"📄 자동 로드된 파일: `{excel_files[0]}`")
 # ✅ Daily 시트 로드 및 처리
     
     # Daily 시트 로드
-    df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
-    df_daily['지출일'] = pd.to_datetime(df_daily['지출일'])
+df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
+df_daily['지출일'] = pd.to_datetime(df_daily['지출일'])
     
     # 탭 생성
     tab1, tab2 = st.tabs(["💰 자금일보", "💸 현금흐름표"])
