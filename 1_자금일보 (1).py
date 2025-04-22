@@ -13,18 +13,25 @@ from io import BytesIO
 # 페이지 설정
 st.set_page_config(page_title="자금일보", layout="wide")
 
-DEFAULT_FILE_PATH = "data/ACOT_CashFlow_TEST_classified_완료.xlsm"
-
-# 파일 업로드 (사이드바)
-uploaded_file = st.sidebar.file_uploader("엑셀 파일을 업로드하세요", type=['xlsx', 'xlsm', 'xls'])
-
+# 업로드 없으면 자동 로딩
 if uploaded_file is None:
     
-    if os.path.exists(DEFAULT_FILE_PATH):
-        with open(DEFAULT_FILE_PATH, "rb") as f:
+    # 폴더 내 엑셀 파일 탐색
+    excel_files = [
+        f for f in os.listdir(DEFAULT_DATA_FOLDER)
+        if os.path.splitext(f)[1].lower() in SUPPORTED_EXTS
+    ]
+    
+    if len(excel_files) == 1:
+        default_path = os.path.join(DEFAULT_DATA_FOLDER, excel_files[0])
+        with open(default_path, "rb") as f:
             uploaded_file = BytesIO(f.read())
+        st.success(f"`{excel_files[0]}` 자동 로드 완료 ✅")
+    elif len(excel_files) == 0:
+        st.error("⚠️ `data` 폴더에 엑셀 파일이 없습니다.")
+        st.stop()
     else:
-        st.error("기본 데이터 파일이 존재하지 않습니다.")
+        st.error("⚠️ `data` 폴더에 파일이 2개 이상 있습니다. 1개만 넣어주세요.")
         st.stop()
     
     # Daily 시트 로드
