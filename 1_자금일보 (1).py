@@ -38,7 +38,7 @@ with open(default_path, "rb") as f:
 
 st.success(f"📄 자동 로드된 파일: `{excel_files[0]}`")
 
-# ✨ 엑셀 처리
+# ✅ Daily 시트 로드 및 처리
     
     # Daily 시트 로드
     df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
