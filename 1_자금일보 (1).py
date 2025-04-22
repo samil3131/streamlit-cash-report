@@ -8,6 +8,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import openpyxl
 import os
+from io import BytesIO
 
 # 페이지 설정
 st.set_page_config(page_title="자금일보", layout="wide")
