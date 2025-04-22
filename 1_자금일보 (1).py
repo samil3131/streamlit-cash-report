@@ -14,11 +14,17 @@ st.set_page_config(page_title="자금일보", layout="wide")
 DEFAULT_FILE_PATH = "data/ACOT_CashFlow_TEST_classified_완료.xlsm"
 
 # 파일 업로드 (사이드바)
-uploaded_file = st.sidebar.file_uploader("엑셀 파일을 업로드하세요", type=['xlsx', 'xlsm', 'xls'], accept_multiple_files=False)
+uploaded_file = st.sidebar.file_uploader("엑셀 파일을 업로드하세요", type=['xlsx', 'xlsm', 'xls'])
 
 if uploaded_file is None:
     st.info("기본 샘플 데이터를 사용 중입니다.")
-    unploaded_file = DEFAULT_FILE_PATH
+    
+    if os.path.exists(DEFAULT_FILE_PATH):
+        with open(DEFAULT_FILE_PATH, "rb") as f:
+            uploaded_file = BytesIO(f.read())
+    else:
+        st.error("기본 데이터 파일이 존재하지 않습니다.")
+        st.stop()
     
     # Daily 시트 로드
     df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
