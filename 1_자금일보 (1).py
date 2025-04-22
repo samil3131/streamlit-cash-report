@@ -13,26 +13,32 @@ from io import BytesIO
 # 페이지 설정
 st.set_page_config(page_title="자금일보", layout="wide")
 
-# 업로드 없으면 자동 로딩
-if uploaded_file is None:
-    
-    # 폴더 내 엑셀 파일 탐색
-    excel_files = [
-        f for f in os.listdir(DEFAULT_DATA_FOLDER)
-        if os.path.splitext(f)[1].lower() in SUPPORTED_EXTS
-    ]
-    
-    if len(excel_files) == 1:
-        default_path = os.path.join(DEFAULT_DATA_FOLDER, excel_files[0])
-        with open(default_path, "rb") as f:
-            uploaded_file = BytesIO(f.read())
-        st.success(f"`{excel_files[0]}` 자동 로드 완료 ✅")
-    elif len(excel_files) == 0:
-        st.error("⚠️ `data` 폴더에 엑셀 파일이 없습니다.")
-        st.stop()
-    else:
-        st.error("⚠️ `data` 폴더에 파일이 2개 이상 있습니다. 1개만 넣어주세요.")
-        st.stop()
+# 상수 설정
+DATA_FOLDER = "data"
+SUPPORTED_EXTS = [".xlsx", ".xlsm", ".xls"]
+
+# 📂 폴더 안에 있는 엑셀파일 자동 탐색
+excel_files = [
+    f for f in os.listdir(DATA_FOLDER)
+    if os.path.splitext(f)[1].lower() in SUPPORTED_EXTS
+]
+
+# 🛑 조건 체크
+if len(excel_files) == 0:
+    st.error("❌ data 폴더에 엑셀 파일이 없습니다.")
+    st.stop()
+elif len(excel_files) > 1:
+    st.error("❌ data 폴더에 엑셀 파일이 2개 이상 있습니다. 1개만 넣어주세요.")
+    st.stop()
+
+# ✅ 파일 자동 로드
+default_path = os.path.join(DATA_FOLDER, excel_files[0])
+with open(default_path, "rb") as f:
+    uploaded_file = BytesIO(f.read())
+
+st.success(f"📄 자동 로드된 파일: `{excel_files[0]}`")
+
+# ✨ 엑셀 처리
     
     # Daily 시트 로드
     df_daily = pd.read_excel(uploaded_file, sheet_name="Daily")
