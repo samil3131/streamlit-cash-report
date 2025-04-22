@@ -19,7 +19,6 @@ DEFAULT_FILE_PATH = "data/ACOT_CashFlow_TEST_classified_완료.xlsm"
 uploaded_file = st.sidebar.file_uploader("엑셀 파일을 업로드하세요", type=['xlsx', 'xlsm', 'xls'])
 
 if uploaded_file is None:
-    st.info("기본 샘플 데이터를 사용 중입니다.")
     
     if os.path.exists(DEFAULT_FILE_PATH):
         with open(DEFAULT_FILE_PATH, "rb") as f:
